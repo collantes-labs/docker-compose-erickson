@@ -1,0 +1,5 @@
+FROM postgres:latest
+
+COPY ./sql/init_postgres.sql /docker-entrypoint-initdb.d/init_postgres.sql
+
+RUN apt-get update && apt-get install -y postgresql-client
