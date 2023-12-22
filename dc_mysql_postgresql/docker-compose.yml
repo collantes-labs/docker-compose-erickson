@@ -2,9 +2,7 @@ version: '3'
 
 services:
   mysql:
-    build:
-      context: .
-      dockerfile: Dockerfile_mysql
+    image: mysql:8.2
     restart: always
     container_name: container_mysql_f
     hostname: host_mysql_f
@@ -14,19 +12,17 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3310:3306"
+      - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"
     volumes:
       - ./sql/init_mysql.sql:/docker-entrypoint-initdb.d/init_mysql.sql
     networks:
       - mynetwork
     expose:
-      - '3306'
+      - '${MYSQL_DOCKER_PORT}'
 
 
   postgres:
-    build:
-      context: .
-      dockerfile: Dockerfile_postgres
+    image: postgres:16.1
     restart: always
     container_name: container_postgres_f
     hostname: host_postgres_f
@@ -35,13 +31,13 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5433:5432"
+      - "${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}"
     volumes:
       - ./sql/init_postgres.sql:/docker-entrypoint-initdb.d/init_postgres.sql
     networks:
       - mynetwork
     expose:
-      - '5432'
+      - '${POSTGRES_DOCKER_PORT}'
 
 networks:
   mynetwork:
